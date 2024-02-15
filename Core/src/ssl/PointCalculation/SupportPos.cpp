@@ -118,7 +118,7 @@ void CSupportPos::generatePos(const CVisionModule* pVision,int num){
 	const int enemyDefenderAmount = calcEnemyDefenderAmount(pVision);
 	double reflectPower;
 	CGeoPoint defaultPos = CGeoPoint(ourLeader.Pos().x(), -ourLeader.Pos().y());  //对方无防守车时，默认助攻点与Leader对称
-	CGeoCirlce bestZone;//最佳进攻区域
+	CGeoCircle bestZone;//最佳进攻区域
 	CGeoPoint  bestPoint;//最佳进攻点
 	bool isNeedStay = false;//是否需要维持之前的助攻点
 	if ( enemyDefenderAmount!= 0&&isBallInOurControl(pVision)){
@@ -262,7 +262,7 @@ double CSupportPos::calcBallReflectDirAndPos(const CVisionModule* pVision, const
 	int effectDefender = 0;//实际生效防守者(一般实际比赛中，一次射门仅由一辆防守车实际完成阻挡）
 	bool isAnyDefenderEffect = false;
 	CGeoPoint TreflectPos;  //Temp 临时变量
-	CGeoCirlce defenderCircle;
+	CGeoCircle defenderCircle;
 	CGeoSegment defenderFaceSeg;
 	double defenderFaceDir;
 	double defaultDir;
@@ -300,7 +300,7 @@ double CSupportPos::calcBallReflectDirAndPos(const CVisionModule* pVision, const
 			if (fabs(defenderFaceDir-defaultDir)>PI*30/180){
 				defenderFaceDir = defaultDir;  //当防守车的朝向存在问题时，默认朝向为背对球门
 			}
-			defenderCircle = CGeoCirlce(pVision->TheirPlayer(currentDefender).Pos(), PLAYER_SIZE);
+			defenderCircle = CGeoCircle(pVision->TheirPlayer(currentDefender).Pos(), PLAYER_SIZE);
 			CGeoLineCircleIntersection inter = CGeoLineCircleIntersection(shootLine, defenderCircle);
 			//由于机器人一般为存在缺口的圆弧，对于真实情况而言，射门一般会被防守车的正面所阻挡，此处将碰撞点统一假设在与圆弧相切且与小车朝向平行的线段上，与真实碰撞点相差不会超过3cm，在实际跑点的过程中可以忽略
 			if (inter.intersectant()){
@@ -364,9 +364,9 @@ double CSupportPos::calcBallReflectPower(const CVisionModule *pVision,CGeoPoint 
 
 //计算最佳分区,根据反弹点来确定，同时反弹力度会对分区半径存在影响
 //To Check
-CGeoCirlce CSupportPos::calcTheBestZone(const CVisionModule *pVision, const double power){
+CGeoCircle CSupportPos::calcTheBestZone(const CVisionModule *pVision, const double power){
 	CGeoPoint centerPos = reflectPos + Utils::Polar2Vector(power, reflectDir);
-	return CGeoCirlce(centerPos, (1000 - power) / 12);
+	return CGeoCircle(centerPos, (1000 - power) / 12);
 }
 
 
@@ -374,7 +374,7 @@ CGeoCirlce CSupportPos::calcTheBestZone(const CVisionModule *pVision, const doub
 
 //计算最佳点
 //最佳点衡限制在最佳区域内，若算点存在问题，可能是最佳区域的范围不够所导致的
-CGeoPoint CSupportPos::calcTheBestPoint(const CVisionModule *pVision,const CGeoCirlce bestZone){
+CGeoPoint CSupportPos::calcTheBestPoint(const CVisionModule *pVision,const CGeoCircle bestZone){
 	const BallVisionT& ball = pVision->Ball();
 	const CGeoPoint ballPos = ball.Pos();
 	const CGeoPoint ballRawPos = ball.Pos();

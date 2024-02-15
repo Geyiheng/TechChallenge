@@ -79,6 +79,8 @@
 #include "GoPIDCircle.h"
 #include "ChaseToGetBall.h"
 #include "lightkick.h"
+#include "TechDefenceRobot.h"
+#include "Tech3PassRobot.h"
 
 /************************************************************************/
 /*                      TaskFactoryV2                                    */
@@ -103,6 +105,10 @@ CPlayerTask* CTaskFactoryV2::MakeTask(const TaskT& task)
 
 //working
 //
+// CPlayerTask* CTaskFactoryV2::GofourRobot(const TaskT& task){
+// 	return MakeTask< CGofourRobot >(task);
+// }
+
 CPlayerTask* CTaskFactoryV2::lightkick(const TaskT& task)
 {
 	return MakeTask<Clightkick>(task);
@@ -115,8 +121,12 @@ CPlayerTask* CTaskFactoryV2::SpeedTest(const TaskT& task)
 {
 	return MakeTask<CSpeedTest>(task);
 }
-
-
+CPlayerTask* CTaskFactoryV2::TechDefenceRobot(const TaskT& task){
+	return MakeTask<CTechDefence>(task);
+}
+CPlayerTask* CTaskFactoryV2::Tech3PassRobot(const TaskT& task){
+	return MakeTask<CTech3Pass>(task);
+}
 //////////////////////////////////////////////////////////////////////////
 // current now debugged skill for game
 CPlayerTask* CTaskFactoryV2::GoPIDCircle(const TaskT& task) {
@@ -368,6 +378,20 @@ CPlayerTask* CTaskFactoryV2::DribbleTurnKickV2(const TaskT& task) {
 //////////////////////////////////////////////////////////////////////////
 // define the namespace used to provide interface for task calling
 namespace PlayerRole {
+	CPlayerTask* makeItTechDefence(const int num)
+	{
+		static TaskT playerTask;
+		playerTask.executor =num;
+		return TaskFactoryV2::Instance()->TechDefenceRobot(playerTask);
+
+	}
+	CPlayerTask* makeItTech3Pass(const int num,const int idx)
+	{
+		static TaskT playerTask;
+		playerTask.executor =num;
+		return TaskFactoryV2::Instance()->Tech3PassRobot(playerTask);
+	}
+
 	CPlayerTask* makeItlightkick(const int num, const double dir, const double power)
 	{	
 		static TaskT playerTask;

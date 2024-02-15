@@ -25,3 +25,4 @@ gSkillTable.CreateSkill{
 		print("This is in skill"..self.name)
 	end
 }
+-- 

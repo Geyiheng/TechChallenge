@@ -95,9 +95,9 @@ class CGeoLineRectangleIntersection {
     const CGeoPoint& point2() const;
 };
 
-class CGeoCirlce : public CGeoShape {
-    CGeoCirlce();
-    CGeoCirlce(const CGeoPoint& c, double r);
+class CGeoCircle : public CGeoShape {
+    CGeoCircle();
+    CGeoCircle(const CGeoPoint& c, double r);
     virtual bool HasPoint(const CGeoPoint& p) const ;
     CGeoPoint Center() const;
     double Radius() const;
@@ -105,7 +105,7 @@ class CGeoCirlce : public CGeoShape {
 };
 
 class CGeoLineCircleIntersection {
-    CGeoLineCircleIntersection(const CGeoLine& line, const CGeoCirlce& circle);
+    CGeoLineCircleIntersection(const CGeoLine& line, const CGeoCircle& circle);
     bool intersectant() const;
     const CGeoPoint& point1() const;
     const CGeoPoint& point2() const;
@@ -128,7 +128,7 @@ class CGeoLineEllipseIntersection {
 };
 
 class CGeoSegmentCircleIntersection {
-    CGeoSegmentCircleIntersection(const CGeoSegment& line, const CGeoCirlce& circle);
+    CGeoSegmentCircleIntersection(const CGeoSegment& line, const CGeoCircle& circle);
     bool intersectant() const;
     const CGeoPoint& point1() const;
     const CGeoPoint& point2() const;

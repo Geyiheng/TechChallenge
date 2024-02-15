@@ -231,7 +231,7 @@ void CCircleAndPass::plan(const CVisionModule* pVision)
 				   double vmin;
 				   CVector V, V0;
 				   CGeoPoint B, P;
-				   CGeoCirlce cirBall = CGeoCirlce(pBall, CIRCLE_R);
+				   CGeoCircle cirBall = CGeoCircle(pBall, CIRCLE_R);
 				   B = pBall;
 				   P = pPlayer;
 				   CVector Vpb,Vpbv,a1,a2;

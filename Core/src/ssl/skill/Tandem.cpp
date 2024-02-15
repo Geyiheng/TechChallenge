@@ -12,6 +12,7 @@ namespace{
 	CGeoPoint ourRightPost;
 	CGeoPoint theirGoal;
 
+
 	bool VERBOSE_MODE = false;
 }
 
@@ -377,13 +378,15 @@ void CTandem::planBlock(const CVisionModule* pVision, int teammate_id, int opp_i
 }
 CPlayerCommand* CTandem::execute(const CVisionModule* pVision)
 {
+
 	if( subTask() ){
 		return subTask()->execute(pVision);
 	}
 	if( _directCommand ){
 		return _directCommand;
 	}
-	std::cout<<"no command!!!"<<endl;
+
+	// std::cout<<"nocmd_";
 	return 0;
 }
 

@@ -612,8 +612,8 @@ CGeoPoint CInterceptBallV2::checkPointAvoidOurPenalty(const CVisionModule* pVisi
 	const BallVisionT& ball = pVision->Ball();
 	const CGeoPoint leftCircleCenter(-Field::PITCH_LENGTH / 2, -Field::PENALTY_AREA_L / 2);
 	const CGeoPoint rightCircleCenter(-Field::PITCH_LENGTH / 2, Field::PENALTY_AREA_L / 2);
-	const CGeoCirlce leftPenaltyCircle(leftCircleCenter, Field::PENALTY_AREA_R);
-	const CGeoCirlce rightPenaltyCircle(rightCircleCenter, Field::PENALTY_AREA_R);
+	const CGeoCircle leftPenaltyCircle(leftCircleCenter, Field::PENALTY_AREA_R);
+	const CGeoCircle rightPenaltyCircle(rightCircleCenter, Field::PENALTY_AREA_R);
 	const CGeoPoint leftPenaltySegmentEnd(-Field::PITCH_LENGTH / 2 + Field::PENALTY_AREA_DEPTH, -Field::PENALTY_AREA_L / 2);
 	const CGeoPoint rightPenaltySegmentEnd(-Field::PITCH_LENGTH / 2 + Field::PENALTY_AREA_DEPTH, Field::PENALTY_AREA_L / 2);
 	const CGeoLine middlePenaltySegment(leftPenaltySegmentEnd, rightPenaltySegmentEnd);

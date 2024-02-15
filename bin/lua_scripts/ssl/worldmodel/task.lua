@@ -1312,6 +1312,14 @@ end
 ----------------------------------------------------------------------------------------------
 
 ------------------------------------ 测试相关的skill ------------------------------------------
+function techdefence()
+	local mexe,mpos=TechDefence{}
+	return {mexe,mpos}
+end
+function tech3pass(idx)
+	local mexe,mpos=Tech3Pass{idx=idx}
+	return {mexe,mpos}
+end
 function testChip()
 	local mexe, mpos = ChaseKick{dir = dir.shoot(),flag = flag.dribbling}
 	return {mexe, mpos, kick.chip, dir.shoot(), pre.specified(9), kp.full(), cp.full(), flag.dribbling}

@@ -116,7 +116,7 @@ void ContactChecker::judgeTwo()
 			if (it->Valid())
 			{
 				if (number>6){color=1;}
-				CGeoCirlce circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE+Param::Field::BALL_SIZE+judge_three[color]);
+				CGeoCircle circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE+Param::Field::BALL_SIZE+judge_three[color]);
 				CGeoPoint p1 = _lastball.Pos();
 				CGeoPoint p2 = _lastball.Pos()+(_lastball.Vel());
 				CGeoSegment ball_line(p1,p2);
@@ -152,7 +152,7 @@ void ContactChecker::judgeThree()
 			if (it->Valid())
 			{
 				if (number>6){color=1;}
-				CGeoCirlce circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE+Param::Field::BALL_SIZE+judge_three[color]);
+				CGeoCircle circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE+Param::Field::BALL_SIZE+judge_three[color]);
 				CGeoPoint p1 =_ball.Pos();
 				CGeoPoint p2 =_ball.Pos()+(-_ball.Vel());
 				CGeoSegment ball_line(p1,p2); 
@@ -219,7 +219,7 @@ void ContactChecker::judgeFive()
 			if (it->Valid())
 			{
 				if (number>6){color=1;}
-				CGeoCirlce circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE);
+				CGeoCircle circle (it->Pos(),Param::Vehicle::V2::PLAYER_SIZE);
 				CGeoPoint p1 = _ball.Pos();
 				CGeoPoint p2 = _ball.Pos()+(_ball.Vel());
 				CGeoSegment ball_line(p1,p2);

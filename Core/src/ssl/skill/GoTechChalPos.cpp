@@ -64,7 +64,7 @@ CGeoPoint CGoTechChalPos::GenerateFrontPoint(const CVisionModule* pVision, const
     const BallVisionT& ball = pVision->Ball();
     const CGeoPoint BallPos = ball.Pos();
     const double r = 250;
-    CGeoCirlce Circle = CGeoCirlce(GoalMiddlePoint, r);
+    CGeoCircle Circle = CGeoCircle(GoalMiddlePoint, r);
     CGeoPoint ChoosePoint[50];
     int cnt = 0;
     k_m = 5;
@@ -102,7 +102,7 @@ CGeoPoint CGoTechChalPos::GenerateMiddlePoint(const CVisionModule* pVision) {
     const BallVisionT& ball = pVision->Ball();
     const CGeoPoint BallPos = ball.Pos();
     const double r = 150;
-    CGeoCirlce Circle = CGeoCirlce(CGeoPoint(0,0), r);
+    CGeoCircle Circle = CGeoCircle(CGeoPoint(0,0), r);
     CGeoPoint ChoosePoint[70];
     int cnt = 0;
     k_m = 5;

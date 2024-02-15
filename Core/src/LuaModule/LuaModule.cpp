@@ -370,7 +370,7 @@ extern "C" int Get_AdvancerPassTo(lua_State * L)
 	LuaModule::Instance()->PushNumber(nextAdvancer);
 	LuaModule::Instance()->PushNumber(advancerPassTo.x());
 	LuaModule::Instance()->PushNumber(advancerPassTo.y());
-	return 3; // 给lua的数字数量
+	return 3; // 赂酶lua碌脛脢媒脳脰脢媒脕驴
 }
 
 extern "C" int Register_Role(lua_State * L)
@@ -633,7 +633,7 @@ extern "C" int Skill_ProtectBall(lua_State * L)
 	return 0;
 }
 
-// 现在使用新的抢球，by dxh 2013.5.20
+// 脧脰脭脷脢鹿脫脙脨脗碌脛脟脌脟貌拢卢by dxh 2013.5.20
 extern "C" int Skill_AdvanceBallV2(lua_State * L)
 {
 	int runner = LuaModule::Instance()->GetNumberArgument(1, NULL);
@@ -643,7 +643,7 @@ extern "C" int Skill_AdvanceBallV2(lua_State * L)
 	TaskMediator::Instance()->setPlayerTask(runner, pTask, 1);
 	return 0;
 }
-// now advance can pass，by yh 2021/4
+// now advance can pass拢卢by yh 2021/4
 extern "C" int Skill_Advance(lua_State * L)
 {
 	int runner = LuaModule::Instance()->GetNumberArgument(1, NULL);
@@ -858,7 +858,7 @@ extern "C" int FUNC_GetMarkingPos(lua_State * L)
 	bool front = LuaModule::Instance()->GetBoolArgument(2);
 	CGeoPoint p;
 	//int bestEnemy = DefenceInfo::Instance()->getAttackOppNumByPri(0);
-	//当receiver为最高优先级的时候，这句话可以理解为场上对方是否有receiver
+	//碌卤receiver脦陋脳卯赂脽脫脜脧脠录露碌脛脢卤潞貌拢卢脮芒戮盲禄掳驴脡脪脭脌铆陆芒脦陋鲁隆脡脧露脭路陆脢脟路帽脫脨receiver
 	/*if (DefenceInfo::Instance()->getOppPlayerByNum(bestEnemy)->isTheRole("RReceiver")) {
 		if (pri > 0) {
 			pri -= 1;
@@ -1215,14 +1215,14 @@ extern "C" int Skill_TimeDelayTest(lua_State * L) {
 	return 0;
 }
 
-//当出现receiver时，找到离球最近的receiver，并看他是否被绕前盯人
+//碌卤鲁枚脧脰receiver脢卤拢卢脮脪碌陆脌毛脟貌脳卯陆眉碌脛receiver拢卢虏垄驴麓脣没脢脟路帽卤禄脠脝脟掳露垄脠脣
 extern "C" int FUNC_IsNearestBallReceiverBeDenied(lua_State * L) {
 	bool bl = MarkingPosV2::Instance()->isNearestBallReceiverBeDenied(vision);
 	LuaModule::Instance()->PushBool(bl);
 	return 1;
 }
 
-//在NormalPlay中MarkingX值最靠前的车的匹配点
+//脭脷NormalPlay脰脨MarkingX脰碌脳卯驴驴脟掳碌脛鲁碌碌脛脝楼脜盲碌茫
 extern "C" int FUNC_MarkingXFirstPos(lua_State * L) {
 	int runner = LuaModule::Instance()->GetNumberArgument(1, NULL);
 	CGeoPoint pos = MarkingPosV2::Instance()->getMarkingPosByNum(vision, runner);
@@ -1233,7 +1233,7 @@ extern "C" int FUNC_MarkingXFirstPos(lua_State * L) {
 	return 2;
 }
 
-//在NormalPlay中Markingx值最靠前的车
+//脭脷NormalPlay脰脨Markingx脰碌脳卯驴驴脟掳碌脛鲁碌
 extern "C" int FUNC_MarkingXFirstNum(lua_State * L) {
 	int runner = LuaModule::Instance()->GetNumberArgument(1, NULL);
 	int enemy = LuaModule::Instance()->GetNumberArgument(2, NULL);
@@ -1244,7 +1244,7 @@ extern "C" int FUNC_MarkingXFirstNum(lua_State * L) {
 	return 0;
 }
 
-// 从Lua中注册开球车朝向供Touch使用，防止球看不见时车会上前拿球
+// 麓脫Lua脰脨脳垄虏谩驴陋脟貌鲁碌鲁炉脧貌鹿漏Touch脢鹿脫脙拢卢路脌脰鹿脟貌驴麓虏禄录没脢卤鲁碌禄谩脡脧脟掳脛脙脟貌
 extern "C" int FUNC_SetPassDir(lua_State * L) {
 	double dir = LuaModule::Instance()->GetNumberArgument(1, NULL);
 	TouchKickPos::Instance()->setPassDir(vision->Cycle(), dir);
@@ -1272,10 +1272,27 @@ extern "C" int FUNC_GetMarkingTouchPos(lua_State * L) {
 
 	return 2;
 }
-
+extern "C" int Skill_TechDefence(lua_State * L)
+{
+	int runner = LuaModule::Instance()->GetNumberArgument(1,NULL);
+	CPlayerTask* pTask =PlayerRole::makeItTechDefence(runner);
+	TaskMediator::Instance()->setPlayerTask(runner,pTask,1);
+	return 0;
+}
+extern "C" int Skill_Tech3Pass(lua_State * L)
+{
+	int runner = LuaModule::Instance()->GetNumberArgument(1,NULL);
+	int idx=LuaModule::Instance()->GetNumberArgument(2,NULL);
+	CPlayerTask* pTask = PlayerRole::makeItTech3Pass(runner,idx);
+	TaskMediator::Instance()->setPlayerTask(runner,pTask,1);
+	return 0;
+}
 luaDef GUIGlue[] =
 {
-	//位置移动
+	//脦禄脰脙脪脝露炉
+	// {"CGofour",				Skill_Gofour},
+	{"CTechDefence",		Skill_TechDefence},
+	{"CTech3Pass",			Skill_Tech3Pass},
 	{"CGoPIDCircle",		Skill_GoPIDCircle},
 	{"CSpeedTest",			Skill_SpeedTest},
 	{"CPenaltyKickV2",      Skill_PenaltyKickV2},
@@ -1285,7 +1302,7 @@ luaDef GUIGlue[] =
 	{"CBezierRush",			Skill_BezierRush},
 	{"CGoAroundRobot",		Skill_GoAroundRobot},
 	{"CGoTechChalPos",      Skill_GoTechChalPos},
-	//其他
+	//脝盲脣没
 	{"CGoSupport",          Skill_GoSupport},
 	{"CStopRobot",			Skill_Stop},
 	{"CGetAdvancerPassTo",  Get_AdvancerPassTo},

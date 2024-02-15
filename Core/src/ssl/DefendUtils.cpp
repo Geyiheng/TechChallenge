@@ -65,8 +65,8 @@ namespace DefendUtils {
 
 	//后卫所在规划线
 	CGeoLine RD_CENTER_SEGMENT = CGeoLine(RCENTER_LEFT, RCENTER_RIGHT);
-	CGeoCirlce RD_CIR_LEFT = CGeoCirlce(RCENTER2BOTTOM_LEFT, PEN_RADIUS);
-	CGeoCirlce RD_CIR_RIGHT = CGeoCirlce(RCENTER2BOTTOM_RIGHT, PEN_RADIUS);
+	CGeoCircle RD_CIR_LEFT = CGeoCircle(RCENTER2BOTTOM_LEFT, PEN_RADIUS);
+	CGeoCircle RD_CIR_RIGHT = CGeoCircle(RCENTER2BOTTOM_RIGHT, PEN_RADIUS);
 
 	//middle及后卫（椭圆规划线）所在规划线原点
 	CGeoPoint CENTERPOINT = CGeoPoint(Param::Field::PITCH_LENGTH / 2, 0);
@@ -732,7 +732,7 @@ namespace DefendUtils {
 		//计算出一个反向的后卫站位点
 		CGeoPoint RMiddlePoint;
 		CGeoLine targetLine = CGeoLine(Rtarget,Rdir);//用于计算交点的直线，为原传入直线按照要求平移PLAYERSIZE后的直线
-		CGeoCirlce Rdefendcircle = CGeoCirlce(CENTERPOINT,Rradius);
+		CGeoCircle Rdefendcircle = CGeoCircle(CENTERPOINT,Rradius);
 		//GDebugEngine::Instance()->gui_debug_line(Rtarget,RGOAL_CENTRE_POS);
 		CGeoLineCircleIntersection intersect = CGeoLineCircleIntersection(targetLine,Rdefendcircle);
 		if (intersect.intersectant()){
@@ -1884,7 +1884,7 @@ namespace DefendUtils {
 		//	int flag = 1;
 		//	if (BallPos.y()<0) flag = -1;
 		//	CGeoPoint CentralPoint = CGeoPoint(-450,25*flag);//确定圆心
-		//	CGeoCirlce Arc = CGeoCirlce(CentralPoint,100);
+		//	CGeoCircle Arc = CGeoCircle(CentralPoint,100);
 		//	CGeoLineCircleIntersection a = CGeoLineCircleIntersection(Ball2OurGoalL,Arc);
 		//	CGeoPoint Point =  a.point1().x()>=-450 ? a.point1():a.point2();
 		//	double Ball2Point_len = CVector(Point.x()-BallPos.x(),Point.y()-BallPos.y()).mod();

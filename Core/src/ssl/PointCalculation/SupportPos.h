@@ -32,8 +32,8 @@ private:
 	int calcEnemyDefenderAmount(const CVisionModule* pVision);
 	double calcBallReflectDirAndPos(const CVisionModule* pVision, const int enemyDefenderAmount);
 	double calcBallReflectPower(const CVisionModule *pVision, CGeoPoint fisrtPos, CGeoPoint secondPos);
-	CGeoCirlce calcTheBestZone(const CVisionModule *pVision, const double power);
-	CGeoPoint calcTheBestPoint(const CVisionModule *pVision, const CGeoCirlce bestZone);
+	CGeoCircle calcTheBestZone(const CVisionModule *pVision, const double power);
+	CGeoPoint calcTheBestPoint(const CVisionModule *pVision, const CGeoCircle bestZone);
 	void checkAvoidShootLine(const CVisionModule *pVision);
 	void keepLeastDistanceFromLeader(const CVisionModule *pVision,double leastDist);
 	void checkAvoidCenterLine(const CVisionModule *pVision, double radius,double buffer);

@@ -304,7 +304,7 @@ namespace Utils {
         CGeoPoint newPos(center + p2c * (radius + buffer) / dist);
         CGeoRectangle fieldRect(FieldLeft() + buffer, FieldTop() + buffer, FieldRight() - buffer, FieldBottom() - buffer);
         if (!fieldRect.HasPoint(newPos)) { // ?????,??????????????????????
-            CGeoCirlce avoidCircle(center, radius + buffer);
+            CGeoCircle avoidCircle(center, radius + buffer);
             std::vector< CGeoPoint > intPoints;
             for (int i = 0; i < 4; ++i) {
                 CGeoLine fieldLine(fieldRect._point[i % 4], fieldRect._point[(i + 1) % 4]);
@@ -363,8 +363,8 @@ namespace Utils {
         if (IF_USE_ELLIPSE) {
             // ellipse penalty
             // ?????????????,????????
-            CGeoCirlce c1(CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2), PENALTY_AREA_R);
-            CGeoCirlce c2(CGeoPoint(-PITCH_LENGTH / 2, -PENALTY_AREA_L / 2), PENALTY_AREA_R);
+            CGeoCircle c1(CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2), PENALTY_AREA_R);
+            CGeoCircle c2(CGeoPoint(-PITCH_LENGTH / 2, -PENALTY_AREA_L / 2), PENALTY_AREA_R);
             CGeoPoint targetPointInstead = targetPoint;
             if (dir >= Param::Math::PI / 2 - 5 / 180 * Param::Math::PI && dir <= Param::Math::PI)
                 return CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2 + PENALTY_AREA_R);
@@ -515,8 +515,8 @@ namespace Utils {
         if (IF_USE_ELLIPSE) {
             // ellipse penalty
             // ?????????????,????????
-            CGeoCirlce c1(CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2), PENALTY_AREA_R);
-            CGeoCirlce c2(CGeoPoint(-PITCH_LENGTH / 2, -PENALTY_AREA_L / 2), PENALTY_AREA_R);
+            CGeoCircle c1(CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2), PENALTY_AREA_R);
+            CGeoCircle c2(CGeoPoint(-PITCH_LENGTH / 2, -PENALTY_AREA_L / 2), PENALTY_AREA_R);
             CGeoPoint targetPointInstead = targetPoint;
             if (dir >= Param::Math::PI / 2 - 5 / 180 * Param::Math::PI && dir <= Param::Math::PI)
                 return CGeoPoint(-PITCH_LENGTH / 2, PENALTY_AREA_L / 2 + PENALTY_AREA_R);
@@ -659,8 +659,8 @@ namespace Utils {
         if (Param::Rule::Version == 2008)
         {
             // ?????????????,????????
-            CGeoCirlce c1(CGeoPoint(-PITCH_LENGTH/2,  PENALTY_AREA_L/2), PENALTY_AREA_R);
-            CGeoCirlce c2(CGeoPoint(-PITCH_LENGTH/2, -PENALTY_AREA_L/2), PENALTY_AREA_R);
+            CGeoCircle c1(CGeoPoint(-PITCH_LENGTH/2,  PENALTY_AREA_L/2), PENALTY_AREA_R);
+            CGeoCircle c2(CGeoPoint(-PITCH_LENGTH/2, -PENALTY_AREA_L/2), PENALTY_AREA_R);
             CGeoPoint targetPointInstead = targetPoint;
             if (dir >= Param::Math::PI/2 - 5/180*Param::Math::PI && dir <= Param::Math::PI)
         return CGeoPoint(-PITCH_LENGTH/2,PENALTY_AREA_L/2+PENALTY_AREA_R);
@@ -750,7 +750,7 @@ namespace Utils {
     }
         else if (Param::Rule::Version == 2004)
         {
-            CGeoCirlce penaltyCircle(CGeoPoint(-PITCH_LENGTH/2, 0),PENALTY_AREA_WIDTH/2);
+            CGeoCircle penaltyCircle(CGeoPoint(-PITCH_LENGTH/2, 0),PENALTY_AREA_WIDTH/2);
             CGeoLine dirLine(targetPoint,dir);
             CGeoLineCircleIntersection dirLine_penaltyCircle(dirLine,penaltyCircle);
             if (dirLine_penaltyCircle.intersectant())
@@ -765,8 +765,8 @@ namespace Utils {
     CGeoPoint GetTheirInterPos(double dir, const CGeoPoint& targetPoint) {
         using namespace Param::Field;
         // ?????????????,????????
-        CGeoCirlce c1(CGeoPoint(PITCH_LENGTH/2, PENALTY_AREA_L/2), PENALTY_AREA_R);
-        CGeoCirlce c2(CGeoPoint(PITCH_LENGTH/2, -PENALTY_AREA_L/2), PENALTY_AREA_R);
+        CGeoCircle c1(CGeoPoint(PITCH_LENGTH/2, PENALTY_AREA_L/2), PENALTY_AREA_R);
+        CGeoCircle c2(CGeoPoint(PITCH_LENGTH/2, -PENALTY_AREA_L/2), PENALTY_AREA_R);
         if (dir <= Param::Math::PI/2 + 5/180*Param::Math::PI && dir >= 0)
             return CGeoPoint(PITCH_LENGTH/2, PENALTY_AREA_L/2 + PENALTY_AREA_R);
         else if	 (dir >= -Param::Math::PI - 5/180*Param::Math::PI	&& dir <= 0)
@@ -887,7 +887,7 @@ namespace Utils {
                 }
             }
             else if (Param::Rule::Version == 2004) { // 2004???????????????
-                CGeoCirlce defenseBox(CGeoPoint(-Param::Field::PITCH_LENGTH / 2, 0), Param::Field::PENALTY_AREA_WIDTH / 2 + avoidBuffer);
+                CGeoCircle defenseBox(CGeoPoint(-Param::Field::PITCH_LENGTH / 2, 0), Param::Field::PENALTY_AREA_WIDTH / 2 + avoidBuffer);
                 CGeoLineCircleIntersection intersection(moving_seg, defenseBox);
                 if (intersection.intersectant()) {
                     if (moving_seg.IsPointOnLineOnSegment(intersection.point1()) || moving_seg.IsPointOnLineOnSegment(intersection.point2())) {
@@ -899,10 +899,10 @@ namespace Utils {
             // 2019, china open, ellipse penalty
             else if (Param::Rule::Version == 2019 &&
                 Param::Field::IF_USE_ELLIPSE) {
-                CGeoCirlce c1(CGeoPoint(-Param::Field::PITCH_LENGTH / 2,
+                CGeoCircle c1(CGeoPoint(-Param::Field::PITCH_LENGTH / 2,
                     Param::Field::PENALTY_AREA_L / 2),
                     Param::Field::PENALTY_AREA_R + avoidBuffer);
-                CGeoCirlce c2(CGeoPoint(-Param::Field::PITCH_LENGTH / 2,
+                CGeoCircle c2(CGeoPoint(-Param::Field::PITCH_LENGTH / 2,
                     -Param::Field::PENALTY_AREA_L / 2),
                     Param::Field::PENALTY_AREA_R + avoidBuffer);
                 CGeoRectangle defenseBox(

@@ -11,6 +11,9 @@
 class CPlayerTask;
 class CTaskFactoryV2 {
 public:
+	// CPlayerTask* CtaskFactoryV2::GofourRobot(const TaskT& task);
+	CPlayerTask* TechDefenceRobot(const TaskT& task);
+	CPlayerTask* Tech3PassRobot(const TaskT& task);
 	CPlayerTask* GoPIDCircle(const TaskT& task);
 	CPlayerTask* Break(const TaskT& task);
 	CPlayerTask* lightkick(const TaskT& task);
@@ -117,6 +120,8 @@ typedef Falcon::NormalSingleton<CTaskFactoryV2> TaskFactoryV2;
 
 //! 调用skill的接口
 namespace PlayerRole {
+	CPlayerTask* makeItTechDefence(const int num);
+	CPlayerTask* makeItTech3Pass(const int num,const int idx);
 	CPlayerTask* makeItlightkick(const int num, const double dir = 0, const double power = 0);
 	CPlayerTask* makeItBreak(const int num, const double dir, const bool needkick = true, const bool isPenalty = false, const bool isSpin = false, const CGeoPoint DribblePoint = CGeoPoint(-1000, -1000));
 	CPlayerTask* makeItStop(const int num, const int flags = 0);

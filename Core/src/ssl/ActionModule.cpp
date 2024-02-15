@@ -146,7 +146,7 @@ void CActionModule::sendToOwl(const rbk::protocol::SRC_Cmd& cmds)
         return;
 	}
     else if (totalnum <= 0) {
-        qDebug()<<"no command!!!";
+        qDebug()<<"nocmd_";
     }
 	ZSS_CMDS.set_login_name(OParamManager::Instance()->LoginName);
     //qDebug()<<"ready to send!!!";
