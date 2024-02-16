@@ -45,7 +45,7 @@ bool DIRsame(double angle1, double angle2) {
     if (same){GDebugEngine::Instance()->gui_debug_msg(T,"same", COLOR_RED);}
     return same;
 }
-//
+//2024.2.14
 CGeoPoint initialpos(const CGeoPoint& A, const CGeoPoint& B, const CGeoPoint& C){
     CGeoLine AB = CGeoLine(A,B);
     CGeoLine AC = CGeoLine(A,C);
@@ -62,7 +62,25 @@ CGeoPoint initialpos(const CGeoPoint& A, const CGeoPoint& B, const CGeoPoint& C)
     CGeoLineLineIntersection Intersection3 = CGeoLineLineIntersection(VerL_AB, VerL_AC);
     return Intersection3.IntersectPoint();
 }
-//
+//2024.2.15
+CGeoPoint tacklepos(const CVisionModule* pVision, int i){
+    const PlayerVisionT& target = pVision->TheirPlayer(i);
+    CGeoPoint targetpos = target.Pos();
+
+    vector<CGeoPoint> a = {CGeoPoint(75,-130), CGeoPoint(75,130), CGeoPoint(-150,0)};
+    vector<CGeoCircle> Circles = {CGeoCircle(a[0], 35), CGeoCircle(a[1], 35), CGeoCircle(a[2], 35)};
+
+    int number;
+    for(int i=0;i<3;i++)if(targetpos.dist(a[i])<30)number = i;
+    
+    CGeoPoint b(targetpos.x()+60*std::cos(target.Dir()),targetpos.y()+60*std::sin(target.Dir()));
+    CGeoSegment Veldir(targetpos, b);
+    //CGeoLine Veldir(targetpos,target.Dir());
+    CGeoSegmentCircleIntersection Intersection = CGeoSegmentCircleIntersection(Veldir, Circles[number]);
+    return Intersection.point1();
+
+
+}
 CGeoPoint backpos(const CGeoPoint& A, const CGeoPoint& H, double distback) {
     // 计算向量AH
     double dx = H.x() - A.x();
@@ -285,7 +303,9 @@ void CTechDefence::plan(const CVisionModule* pVision)
     GDebugEngine::Instance()->gui_debug_arc(A2,30,0,360, COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_arc(A3,30,0,360, COLOR_YELLOW);
     CGeoPoint I = initialpos(OPptrs1[1]->Pos(),OPptrs1[2]->Pos(),OPptrs1[3]->Pos());
+    CGeoPoint J = tacklepos(pVision,1);
     GDebugEngine::Instance()->gui_debug_msg(I,"I", COLOR_YELLOW);
+    GDebugEngine::Instance()->gui_debug_msg(J,"J", COLOR_YELLOW);
 
     for (double iSAH:SAHs)
     {
