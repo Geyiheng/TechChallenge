@@ -59,6 +59,23 @@ CGeoPoint R01Head(const CGeoPoint& R, double DIR, double distance) {
     double deltaY = distance * sin(DIR); // Calculate the y offset
     return CGeoPoint(R.x() + deltaX, R.y() + deltaY); // Return the new point
 }
+double normalizeAngle(double angle) {
+    while (angle > M_PI) angle -= 2 * M_PI;
+    while (angle <= -M_PI) angle += 2 * M_PI;
+    return angle;
+}
+bool DIRsame(double angle1, double angle2){
+    const double tolerance = 70 * M_PI / 180; // 5度转换为弧度
+    angle1 = normalizeAngle(angle1);
+    angle2 = normalizeAngle(angle2);
+    double diff = std::abs(angle1 - angle2);
+    double sum = std::abs(angle1 + angle2);
+    bool same= diff <= tolerance || (std::abs(angle1) > M_PI - tolerance && std::abs(angle2) > M_PI - tolerance && sum <= tolerance);
+    CGeoPoint T(0,-30);
+    if (same){GDebugEngine::Instance()->gui_debug_msg(T,"same", COLOR_RED);}
+    return same;
+}
+
 CTech3Pass::CTech3Pass() 
 {
 	
@@ -100,7 +117,6 @@ void CTech3Pass::plan(const CVisionModule* pVision)
     // }
     // std::cout << std::endl;
 
-    
 
 // -----------------------------------------------CALCULATE THREE POINTS
 	enum states {PrepareAndPass,Receive,Test};
@@ -111,7 +127,7 @@ void CTech3Pass::plan(const CVisionModule* pVision)
 	CGeoPoint A3(150,0);
 	CGeoPoint A4;
 	setState(Test);
-	if (state()==Test)
+	if(state()==Test)
 	{
 // ------------------------------------------------IF ROBOT IS TO GO TO A POINT ,THEN DEFINE A1 A2 A3 ABOVE
 	    if (rolenum==rolenums[1])
@@ -127,6 +143,14 @@ void CTech3Pass::plan(const CVisionModule* pVision)
 	    	A4=A3;
 	    }
 	    taskR1.player.pos=A4;
+        int rolenum=task().executor;
+        taskR1.executor=1;//OPptrs的定义    
+	    double DIR1=OPptrs[1]->Dir();
+        taskR1.player.angle = DIR1+1;
+        if (DIRsame(DIR1,M_PI/2))
+        {
+            taskR1.player.angle=DIR1-1.5;   
+        }
 	    setSubTask(TaskFactoryV2::Instance()->GotoPosition(taskR1));
 		CStatedTask::plan(pVision);
 	}

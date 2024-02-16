@@ -29,15 +29,15 @@ namespace
 {
 enum TDstate {getball ,wait};//setState(getball);if (state()==getball);
 }
-double normalizeAngle(double angle) {
+double normalizeAngle1(double angle) {
     while (angle > M_PI) angle -= 2 * M_PI;
     while (angle <= -M_PI) angle += 2 * M_PI;
     return angle;
 }
-bool DIRsame(double angle1, double angle2) {
+bool DIRsame1(double angle1, double angle2) {
     const double tolerance = 30 * M_PI / 180; // 5度转换为弧度
-    angle1 = normalizeAngle(angle1);
-    angle2 = normalizeAngle(angle2);
+    angle1 = normalizeAngle1(angle1);
+    angle2 = normalizeAngle1(angle2);
     double diff = std::abs(angle1 - angle2);
     double sum = std::abs(angle1 + angle2);
     bool same= diff <= tolerance || (std::abs(angle1) > M_PI - tolerance && std::abs(angle2) > M_PI - tolerance && sum <= tolerance);
@@ -129,7 +129,7 @@ public:
         // 计算O到H的方向
         double SHP=A.dist(H)*tan(AHP);
         double ohDir = (H - O).dir();
-        if(!DIRsame(DIR,ohDir)) {
+        if(!DIRsame1(DIR,ohDir)) {
             GDebugEngine::Instance()->gui_debug_msg(O,"O", COLOR_PURPLE);
             GDebugEngine::Instance()->gui_debug_msg(H,"H", COLOR_PURPLE);
             return backpos(H, O, SHP); 
