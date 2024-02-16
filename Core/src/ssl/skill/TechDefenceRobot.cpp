@@ -63,20 +63,31 @@ CGeoPoint initialpos(const CGeoPoint& A, const CGeoPoint& B, const CGeoPoint& C)
     return Intersection3.IntersectPoint();
 }
 //2024.2.15
-CGeoPoint tacklepos(const CVisionModule* pVision, int i){
-    const PlayerVisionT& target = pVision->TheirPlayer(i);
-    CGeoPoint targetpos = target.Pos();
-
+CGeoPoint tacklepos(const CVisionModule* pVision){
+    const BallVisionT& ball = pVision->Ball();
+    CGeoPoint ballpos = ball.Pos();
+    
     vector<CGeoPoint> a = {CGeoPoint(75,-130), CGeoPoint(75,130), CGeoPoint(-150,0)};
     vector<CGeoCircle> Circles = {CGeoCircle(a[0], 35), CGeoCircle(a[1], 35), CGeoCircle(a[2], 35)};
 
-    int number;
-    for(int i=0;i<3;i++)if(targetpos.dist(a[i])<30)number = i;
-    
+    int circlenum = 3, irole;
+    for(int i=0;i<3;i++)if(ballpos.dist(a[i])<50)circlenum = i;
+    if(circlenum ==3)return CGeoPoint(0,0);
+    for(int i = 0; i <= Param::Field::MAX_PLAYER; ++i){
+        const PlayerVisionT& target = pVision->TheirPlayer(i);
+        if(target.Valid()){
+            CGeoPoint targetpos = target.Pos();
+            if(targetpos.dist(a[circlenum])<30){
+                irole = i;break;
+            }
+        }    
+    }
+    const PlayerVisionT& target = pVision->TheirPlayer(irole);
+    CGeoPoint targetpos = target.Pos();
     CGeoPoint b(targetpos.x()+60*std::cos(target.Dir()),targetpos.y()+60*std::sin(target.Dir()));
     CGeoSegment Veldir(targetpos, b);
     //CGeoLine Veldir(targetpos,target.Dir());
-    CGeoSegmentCircleIntersection Intersection = CGeoSegmentCircleIntersection(Veldir, Circles[number]);
+    CGeoSegmentCircleIntersection Intersection = CGeoSegmentCircleIntersection(Veldir, Circles[circlenum]);
     return Intersection.point1();
 
 
@@ -303,7 +314,7 @@ void CTechDefence::plan(const CVisionModule* pVision)
     GDebugEngine::Instance()->gui_debug_arc(A2,30,0,360, COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_arc(A3,30,0,360, COLOR_YELLOW);
     CGeoPoint I = initialpos(OPptrs1[1]->Pos(),OPptrs1[2]->Pos(),OPptrs1[3]->Pos());
-    CGeoPoint J = tacklepos(pVision,1);
+    CGeoPoint J = tacklepos(pVision);
     GDebugEngine::Instance()->gui_debug_msg(I,"I", COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_msg(J,"J", COLOR_YELLOW);
 
