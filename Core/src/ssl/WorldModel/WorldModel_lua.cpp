@@ -275,7 +275,7 @@ int CWorldModel::getEnemyKickOffNum()
 	}
 	//暂且用区域内的车的数量判断敌方开球车数量
 	if ("theirIndirectKick" == refMsg || "theirDirectKick" == refMsg){
-		CGeoCircle kickOffArea = CGeoCircle(vision()->Ball().Pos(),75);
+		CGeoCirlce kickOffArea = CGeoCirlce(vision()->Ball().Pos(),75);
 		for (int i =0;i<Param::Field::MAX_PLAYER;i++){
 			if (kickOffArea.HasPoint(vision()->TheirPlayer(i).Pos())){
 				kickOffNum++;

@@ -790,7 +790,7 @@ void CAdvanceBallV4::blockingBestOppTime(const CVisionModule* pVision, int vecNu
 	const PlayerVisionT& me = pVision->OurPlayer(vecNumber);
 	const BallVisionT& ball = pVision->Ball();
 	CGeoSegment oppShootLine = CGeoSegment(opp.Pos(), CGeoPoint(-Param::Field::PITCH_LENGTH / 2.0, 0));
-	CGeoCircle oppCircle = CGeoCircle(opp.Pos(), OPP_HAS_BALL_DIST * 0.8);
+	CGeoCirlce oppCircle = CGeoCirlce(opp.Pos(), OPP_HAS_BALL_DIST * 0.8);
 	CGeoSegmentCircleIntersection intersectionPoint = CGeoSegmentCircleIntersection(oppShootLine, oppCircle);
 	// 此处计算shootline和circle的交点，我应当到交点上面去
 	CGeoPoint movingPoint = intersectionPoint.point1();

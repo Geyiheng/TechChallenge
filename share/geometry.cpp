@@ -26,21 +26,6 @@ CGeoLineLineIntersection::CGeoLineLineIntersection(const CGeoLine& line_1,const 
 		_intersectant = true;
 	}
 }
-CGeoLine verticalLine1(const CGeoLine& line, const CGeoPoint& point) { 
-    double angle = -std::atan2(line.a(), line.b()) + 3.1415926535 / 2; 
-    // 计算垂线的方向，即直线方向加90度 
-    CGeoPoint endPoint(point.x() + std::cos(angle), point.y() + std::sin(angle)); 
-    // 计算垂线的终点坐标 
-    return CGeoLine(point, endPoint);
-}   // 返回由起点和终点构成的垂线 
-
-CGeoLine verticalLine2(const CGeoLine& line, const CGeoPoint& point) { 
-    double angle = -std::atan2(line.a(), line.b()) - 3.1415926535 / 2;
-    // 计算垂线的方向，即直线方向减90度 
-    CGeoPoint endPoint(point.x() + std::cos(angle), point.y() + std::sin(angle)); 
-    // 计算垂线的终点坐标 
-    return CGeoLine(point, endPoint);
-}   // 返回由起点和终点构成的垂线 
     
 
 /************************************************************************/
@@ -71,9 +56,9 @@ bool CGeoRectangle::HasPoint(const CGeoPoint& p ) const
 }
 
 /************************************************************************/
-/*                         CGeoCircle                                   */
+/*                         CGeoCirlce                                   */
 /************************************************************************/
-bool CGeoCircle::HasPoint(const CGeoPoint& p) const
+bool CGeoCirlce::HasPoint(const CGeoPoint& p) const
 {
 	double d = (p - _center).mod();
 	if(d < _radius){
@@ -122,7 +107,7 @@ CGeoLineRectangleIntersection::CGeoLineRectangleIntersection(const CGeoLine& lin
 /************************************************************************/
 /*                        CGeoLineCircleIntersection                    */
 /************************************************************************/
-CGeoLineCircleIntersection::CGeoLineCircleIntersection(const CGeoLine& line,const CGeoCircle& circle)
+CGeoLineCircleIntersection::CGeoLineCircleIntersection(const CGeoLine& line,const CGeoCirlce& circle)
 {
 	CGeoPoint projection = line.projection(circle.Center());
 	CVector center_to_projection = projection - circle.Center();
@@ -220,7 +205,7 @@ CGeoLineEllipseIntersection::CGeoLineEllipseIntersection(const CGeoLine& line,co
 /*********************************************************************/
 /*                     CGeoSegmentCircleIntersection                 */
 /********************************************************************/
-CGeoSegmentCircleIntersection::CGeoSegmentCircleIntersection(const CGeoSegment& line,const CGeoCircle& circle)
+CGeoSegmentCircleIntersection::CGeoSegmentCircleIntersection(const CGeoSegment& line,const CGeoCirlce& circle)
 {
 	CGeoPoint projection = line.projection(circle.Center());
 	CVector center_to_projection = projection - circle.Center();

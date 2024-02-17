@@ -130,27 +130,19 @@ void CTech3Pass::plan(const CVisionModule* pVision)
 	if(state()==Test)
 	{
 // ------------------------------------------------IF ROBOT IS TO GO TO A POINT ,THEN DEFINE A1 A2 A3 ABOVE
-	    if (rolenum==rolenums[1])
+	    if (rolenum==rolenums[0])
 	    {
 	    	A4=A1;
 	    }
-	    else if (rolenum==rolenums[2])
+	    else if (rolenum==rolenums[1])
 	    {
 	    	A4=A2;
 	    }
-	    else if (rolenum==rolenums[3])
+	    else if (rolenum==rolenums[2])
 	    {
 	    	A4=A3;
 	    }
 	    taskR1.player.pos=A4;
-        int rolenum=task().executor;
-        taskR1.executor=1;//OPptrsµÄ¶¨Òå    
-	    double DIR1=OPptrs[1]->Dir();
-        taskR1.player.angle = DIR1+1;
-        if (DIRsame(DIR1,M_PI/2))
-        {
-            taskR1.player.angle=DIR1-1.5;   
-        }
 	    setSubTask(TaskFactoryV2::Instance()->GotoPosition(taskR1));
 		CStatedTask::plan(pVision);
 	}

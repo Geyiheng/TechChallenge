@@ -359,7 +359,7 @@ CGeoPoint CIndirectDefender::generatePos(const CVisionModule* pVision)
 	//{
 	//	CGeoPoint points[8];
 	//	int pointCount = 0;
-	//	const CGeoCircle standardCircle = CGeoCircle(ballPos,RADIUS);
+	//	const CGeoCirlce standardCircle = CGeoCirlce(ballPos,RADIUS);
 	//	CGeoLine standardLine = CGeoLine(leftUp,leftDown);
 	//	CGeoLineCircleIntersection intersect = CGeoLineCircleIntersection(standardLine,standardCircle);
 	//	if (intersect.intersectant())

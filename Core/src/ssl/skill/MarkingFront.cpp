@@ -235,7 +235,7 @@ void CMarkingFront::plan(const CVisionModule* pVision){
 		{
 			if (_markPos.dist(ballPos) < REF_AVOID_BALL)
 			{
-				CGeoCircle ballCircle = CGeoCircle(ballPos,REF_AVOID_BALL);
+				CGeoCirlce ballCircle = CGeoCirlce(ballPos,REF_AVOID_BALL);
 				CGeoLine markLine = CGeoLine(_markPos,ourGoal);
 				CGeoLineCircleIntersection markIntersect = CGeoLineCircleIntersection(markLine,ballCircle);
 				if (markIntersect.intersectant())

@@ -676,7 +676,7 @@ void CAdvanceBallV1::blockingBestOppTime(const CVisionModule* pVision,int vecNum
 	const BallVisionT& ball = pVision->Ball();
 	CVector opp2ourGoal = CGeoPoint(-Param::Field::PITCH_LENGTH / 2.0 , 0) - opp.Pos();
 	CGeoSegment oppShootLine = CGeoSegment(opp.Pos(), CGeoPoint(-Param::Field::PITCH_LENGTH / 2.0 , 0));
-	CGeoCircle oppCircle = CGeoCircle(opp.Pos(),OPP_HAS_BALL_DIST* 0.25);
+	CGeoCirlce oppCircle = CGeoCirlce(opp.Pos(),OPP_HAS_BALL_DIST* 0.25);
 	CGeoSegmentCircleIntersection intersectionPoint = CGeoSegmentCircleIntersection(oppShootLine,oppCircle);
 	CGeoPoint moviongPoint = intersectionPoint.point1();
 	CVector me2Ball = ball.Pos() - me.Pos();

@@ -141,7 +141,7 @@ CGeoPoint CDefaultPos::generatePos(const CVisionModule* pVision){
 	{
 		if (_default[2].dist(vision->Ball().Pos()) < 60)
 		{
-			CGeoCircle ballCircle = CGeoCircle(vision->Ball().Pos(),80);
+			CGeoCirlce ballCircle = CGeoCirlce(vision->Ball().Pos(),80);
 			CGeoLine baseLine = CGeoLine(_default[0],_default[1]);
 			CGeoLineCircleIntersection baseIntersect = CGeoLineCircleIntersection(baseLine,ballCircle);
 			if (baseIntersect.intersectant())

@@ -45,12 +45,26 @@ bool DIRsame1(double angle1, double angle2) {
     if (same){GDebugEngine::Instance()->gui_debug_msg(T,"same", COLOR_RED);}
     return same;
 }
+CGeoLine verticalLine1(const CGeoLine& line, const CGeoPoint& point) { 
+    double angle = -std::atan2(line.a(), line.b()) + 3.1415926535 / 2; 
+    // 计算垂线的方向，即直线方向加90度 
+    CGeoPoint endPoint(point.x() + std::cos(angle), point.y() + std::sin(angle)); 
+    // 计算垂线的终点坐标 
+    return CGeoLine(point, endPoint);
+}   // 返回由起点和终点构成的垂线 
+CGeoLine verticalLine2(const CGeoLine& line, const CGeoPoint& point) { 
+    double angle = -std::atan2(line.a(), line.b()) - 3.1415926535 / 2;
+    // 计算垂线的方向，即直线方向减90度 
+    CGeoPoint endPoint(point.x() + std::cos(angle), point.y() + std::sin(angle)); 
+    // 计算垂线的终点坐标 
+    return CGeoLine(point, endPoint);
+}   // 返回由起点和终点构成的垂线 
 //2024.2.14
 CGeoPoint initialpos(const CGeoPoint& A, const CGeoPoint& B, const CGeoPoint& C){
     CGeoLine AB = CGeoLine(A,B);
     CGeoLine AC = CGeoLine(A,C);
-    CGeoCircle CircleB = CGeoCircle(B, 30);
-    CGeoCircle CircleC = CGeoCircle(C, 30);
+    CGeoCirlce CircleB = CGeoCirlce(B, 30);
+    CGeoCirlce CircleC = CGeoCirlce(C, 30);
 
     CGeoLineCircleIntersection Intersection1 = CGeoLineCircleIntersection(AB, CircleB);
     CGeoPoint D = Intersection1.point2();
@@ -68,10 +82,10 @@ CGeoPoint tacklepos(const CVisionModule* pVision){
     CGeoPoint ballpos = ball.Pos();
     
     vector<CGeoPoint> a = {CGeoPoint(75,-130), CGeoPoint(75,130), CGeoPoint(-150,0)};
-    vector<CGeoCircle> Circles = {CGeoCircle(a[0], 35), CGeoCircle(a[1], 35), CGeoCircle(a[2], 35)};
+    vector<CGeoCirlce> Circles = {CGeoCirlce(a[0], 55), CGeoCirlce(a[1], 55), CGeoCirlce(a[2], 55)};
 
     int circlenum = 3, irole;
-    for(int i=0;i<3;i++)if(ballpos.dist(a[i])<50)circlenum = i;
+    for(int i=0;i<3;i++)if(ballpos.dist(a[i])<60)circlenum = i;
     if(circlenum ==3)return CGeoPoint(0,0);
     for(int i = 0; i <= Param::Field::MAX_PLAYER; ++i){
         const PlayerVisionT& target = pVision->TheirPlayer(i);
@@ -228,17 +242,17 @@ void CTechDefence::plan(const CVisionModule* pVision)
     }
     std::cout << std::endl;
     std::cout<<"task().executor"<<rolenum<<std::endl;
-    taskR1.executor=rolenums[1];
+    taskR1.executor=rolenums[0];
 // ---------------------------------------------PREPARE INPUTS FOR CLASS INTERCEPT 
 	CGeoPoint O=ball.Pos(); // 射线的起点
     double DIR =ball.Vel().dir(); 
-    CGeoPoint A=OPptrs[1]->Pos(); // 射线外的点A,应该先有一个谁快要接到球的判断车号，或踢球者也可以改这个谁快要接到球的车号
+    CGeoPoint A=OPptrs[0]->Pos(); // 射线外的点A,应该先有一个谁快要接到球的判断车号，或踢球者也可以改这个谁快要接到球的车号
 // ----------------------------------------------GET INFOS FROM CLASS INTERCEPT
     
     Intercept calculator(O, DIR, A);
     CGeoLine M = calculator.LineM(); 
     double VB=ball.Vel().mod()*0.01;
-    double VOP=OPptrs[1]->Vel().mod()*0.01;
+    double VOP=OPptrs[0]->Vel().mod()*0.01;
     double maxa=3;
     double SAH;
     double SOH;
@@ -281,7 +295,8 @@ void CTechDefence::plan(const CVisionModule* pVision)
     }
 //----------------------------------------------CALCULATE POINTBACK FROM DISTBACK.THE distback AND H ARE RENEWED
     CGeoPoint B= backpos(A,H,distback);
-    taskR1.player.pos=B;
+    CGeoPoint J = tacklepos(pVision);
+    taskR1.player.pos=J;
 //----------------------------------------------PRINT ALL INFOS
     GDebugEngine::Instance()->gui_debug_msg(O,"O", COLOR_RED);
     GDebugEngine::Instance()->gui_debug_msg(H,"HH", COLOR_RED);
@@ -313,8 +328,7 @@ void CTechDefence::plan(const CVisionModule* pVision)
     GDebugEngine::Instance()->gui_debug_arc(A1,30,0,360, COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_arc(A2,30,0,360, COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_arc(A3,30,0,360, COLOR_YELLOW);
-    CGeoPoint I = initialpos(OPptrs1[1]->Pos(),OPptrs1[2]->Pos(),OPptrs1[3]->Pos());
-    CGeoPoint J = tacklepos(pVision);
+    CGeoPoint I = initialpos(OPptrs1[0]->Pos(),OPptrs1[1]->Pos(),OPptrs1[2]->Pos());
     GDebugEngine::Instance()->gui_debug_msg(I,"I", COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_msg(J,"J", COLOR_YELLOW);
 
