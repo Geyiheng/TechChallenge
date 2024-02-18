@@ -7,6 +7,7 @@
 
 
 #include <iostream>
+#include <time.h>
 #include "GDebugEngine.h"
 #include "Vision/VisionModule.h"
 #include "skill/Factory.h"
@@ -35,6 +36,7 @@ int CTech3Pass:: ifstep2 = 0;
 int CTech3Pass:: ifstart = 0;
 int CTech3Pass:: rotvelbuff = 0;
 int CTech3Pass:: ifchange = 0;
+
 //int CTech3Pass:: forcekickbuff = 0;
 //=================================================================初始化(可以考虑放进构造函数)
 
@@ -228,6 +230,10 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
             }
             break;
         case state_pass:
+        {
+            static clock_t  start = clock(), end = clock();
+            end = clock();
+            clock_t duration = end - start;
             receiver2me = CVector(pVision->OurPlayer(num).Pos() - pVision->OurPlayer(runner).Pos());
             ball2me = CVector(ball.Pos() - pVision->OurPlayer(runner).Pos());
             GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(200, 120), to_string(rotvelbuff).c_str(), COLOR_YELLOW);
@@ -237,7 +243,7 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
             if(fabs(receiver2me.dir() - ball2me.dir()) < 0.1) buff++;
             if(fabs(me.RotVel()) < 0.1) rotvelbuff++;
             else rotvelbuff = 0;
-            if(passwhen(pVision) && (BallStatus::Instance()->getBallPossession(true, runner) > 0.8 && 
+            if((passwhen(pVision) || duration >= 900) && (BallStatus::Instance()->getBallPossession(true, runner) > 0.8 && 
                 ((fabs(receiver2me.dir() - pVision->OurPlayer(runner).Dir()) < 0.05) || 
                 buff > 30) && rotvelbuff >= 7 ))
                 //------------------------------------------------------------------------------passwhen 有待完善
@@ -260,8 +266,9 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
             }
             else
                 setSubTask(PlayerRole::makeItNoneTrajGetBall(runner, receiver2me.dir()));
-            if(ifchange >= 60)
+            if(ifchange >= 60 && duration < 900)
                 passwho(pVision, 1, runner);
+        }
     }
     GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-500 + 40 * runner, 0), to_string(state()).c_str(), COLOR_RED);
     GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-500 + 100 * runner, -150), to_string(CVector(pVision->OurPlayer(runner).Pos() - ball.Pos()).mod()).c_str(), COLOR_RED);
@@ -269,7 +276,6 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
     CStatedTask::plan(pVision);
 }
 //=================================================================================================================================具体pass实现
-
 void CTech3Pass:: plan(const CVisionModule* pVision)
 {   
     double minn = 1000000;
@@ -280,8 +286,7 @@ void CTech3Pass:: plan(const CVisionModule* pVision)
 	GDebugEngine::Instance()->gui_debug_arc(circleCenter[1], 30,0,360, COLOR_RED);
 	GDebugEngine::Instance()->gui_debug_arc(circleCenter[2], 30,0,360, COLOR_RED);
     GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(0, 0), to_string(ball.Vel().mod()).c_str(), COLOR_BLUE);
-    
-    
+     
     for (int i = 0; i <= 2; i++)
     {
         const CVector player2target = pVision->OurPlayer(runner).Pos() - circleCenter[i];

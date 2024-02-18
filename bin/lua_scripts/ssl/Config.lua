@@ -10,7 +10,7 @@ IS_TEST_MODE = true
 if not IS_YELLOW then
 	gTestPlay = "Test_Tech3Pass"
 else
-	gTestPlay = "Test_Run"
+	gTestPlay = "Test_TechDefence"
 end
 
 -- PureDefence8 NormalKick

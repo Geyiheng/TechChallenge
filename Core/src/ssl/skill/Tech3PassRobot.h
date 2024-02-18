@@ -1,6 +1,7 @@
 #ifndef Tech3Pass_h__
 #define Tech3Pass_h__
 #include <skill/PlayerTask.h>
+#include <time.h>
 class CTech3Pass : public CStatedTask{
 public:
 	CTech3Pass();
