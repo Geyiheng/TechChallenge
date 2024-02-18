@@ -8,7 +8,7 @@ gPlayTable.CreatePlay{
         return "start"
       end
     end,
-    Leader   = task.techdefence(),
+    Kicker  = task.techdefence(),
     -- Assister = task.markingFront("First"),
     -- Special  = task.markingFront("Second"),
     match    = ""

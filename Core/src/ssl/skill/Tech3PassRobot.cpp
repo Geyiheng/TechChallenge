@@ -241,7 +241,7 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
             std:: cout << "ifchange " << ifchange << endl;
             // forcekickbuff++;
             if(fabs(receiver2me.dir() - ball2me.dir()) < 0.1) buff++;
-            if(fabs(me.RotVel()) < 0.1) rotvelbuff++;
+            if(fabs(me.RotVel()) < 0.1) {rotvelbuff++;}//CGeoPoint ORA(100,0);GDebugEngine::Instance()->gui_debug_msg(ORA, ("rotate velo" + std::to_string(me.RotVel())).c_str(), COLOR_YELLOW);
             else rotvelbuff = 0;
             if((passwhen(pVision) || duration >= 900) && (BallStatus::Instance()->getBallPossession(true, runner) > 0.8 && 
                 ((fabs(receiver2me.dir() - pVision->OurPlayer(runner).Dir()) < 0.05) || 
