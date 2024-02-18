@@ -5,7 +5,7 @@
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
-
+#endif
 
 #include <iostream>
 #include "GDebugEngine.h"
@@ -145,4 +145,3 @@ CTechDefence::~CTechDefence() {}
 
 CPlayerCommand* CTechDefence::execute(const CVisionModule* pVision)
 {if (subTask()){return subTask()->execute(pVision);} return NULL;}
-#endif
