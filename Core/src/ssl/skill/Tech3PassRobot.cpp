@@ -139,14 +139,16 @@ bool CTech3Pass:: passwhen(const CVisionModule* pVision)
         {
             CVector enemy2ball = player.Pos() - ball.Pos();
             // CVector enemy2ball = ball.Pos() - player.Pos();
-            if(fabs(enemy2ball.dir() - receiver2ball.dir()) > 0.1)
+            if(fabs(enemy2ball.dir() - receiver2ball.dir()) > 0.25)
             {
  
                 ifchange = 0;
                 return true;
             }
             // GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-460, 50), to_string(enemy2ball.dir()).c_str(), COLOR_BLUE);
-            // GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-460, 70), to_string(me.Dir()).c_str(), COLOR_BLUE);
+            // GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-460, 70), to_string(receiver2ball.dir()).c_str(), COLOR_BLUE);
+            std::cout << "enemy2ball " << enemy2ball.dir() << endl;
+            std::cout << "receiver2ball " << receiver2ball.dir() << endl; 
         }
     }
     std:: cout << "giaogiao" << endl;
@@ -237,15 +239,15 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
             receiver2me = CVector(pVision->OurPlayer(num).Pos() - pVision->OurPlayer(runner).Pos());
             ball2me = CVector(ball.Pos() - pVision->OurPlayer(runner).Pos());
             GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(200, 120), to_string(duration).c_str(), COLOR_YELLOW);
-            // GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(200, 140), to_string(ifstart).c_str(), COLOR_YELLOW);
+            GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(200, 140), to_string(passwhen(pVision)).c_str(), COLOR_YELLOW);
             std:: cout << "ifchange " << ifchange << endl;
             // forcekickbuff++;
             if(fabs(receiver2me.dir() - ball2me.dir()) < 0.1) buff++;
             if(fabs(me.RotVel()) < 0.1) {rotvelbuff++;}//CGeoPoint ORA(100,0);GDebugEngine::Instance()->gui_debug_msg(ORA, ("rotate velo" + std::to_string(me.RotVel())).c_str(), COLOR_YELLOW);
             else rotvelbuff = 0;
-            if((passwhen(pVision) || duration >= 9000) && (BallStatus::Instance()->getBallPossession(true, runner) > 0.8 && 
+            if((passwhen(pVision) || duration >= 20000) && BallStatus::Instance()->getBallPossession(true, runner) > 0.8 && 
                 ((fabs(receiver2me.dir() - pVision->OurPlayer(runner).Dir()) < 0.05) || 
-                buff > 30) && rotvelbuff >= 7 ))
+                buff > 30) && rotvelbuff >= 7 )
                 //------------------------------------------------------------------------------passwhen 有待完善
             {
                 setSubTask(PlayerRole::makeItNoneTrajGetBall(runner, receiver2me.dir()));
@@ -256,6 +258,16 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
                 start = clock();
                 KickStatus::Instance()->setKick(runner, 600);
                 //setSubTask(PlayerRole::makeItChaseKickV2(runner, dir.dir()));
+            }
+            else if(passwhen(pVision) && BallStatus::Instance()->getBallPossession(true, runner) > 0.8 &&
+             fabs(receiver2me.dir() - pVision->OurPlayer(runner).Dir()) < 0.15 && 
+             duration >= 9000)
+            {
+                setSubTask(PlayerRole::makeItNoneTrajGetBall(runner, receiver2me.dir()));
+                buff = 0;
+                rotvelbuff = 0;
+                start = clock();
+                KickStatus::Instance()->setKick(runner, 300);
             }
             else if(BallStatus::Instance()->getBallPossession(true, runner) > 0.8)
             {
@@ -271,7 +283,7 @@ void CTech3Pass:: passto(const CVisionModule* pVision)
                 GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(200, 100), "kick_get", COLOR_YELLOW);
                 setSubTask(PlayerRole::makeItNoneTrajGetBall(runner, receiver2me.dir()));
             }
-            if(ifchange >= 60 && duration < 9000)
+            if(ifchange >= 60 && duration < 20000)
                 passwho(pVision, 1, runner);
         }
     }
