@@ -66,6 +66,9 @@ double crossProduct(const CGeoPoint& A, const CGeoPoint& B, const CGeoPoint& C) 
     CGeoPoint AC(C.x() - A.x(), C.y() - A.y());
     return AB.x() * AC.y() - AB.y() * AC.x();
 }
+double crossProduct(const CVector AB, const CVector AC) {
+    return AB.x() * AC.y() - AB.y() * AC.x();
+}
 
 // Main function to determine on which side of the line through A1 and AM the point B1 lies
 CGeoPoint CTech3Pass:: passwho(const CGeoPoint& A1, const CGeoPoint& A2, const CGeoPoint& A3, const CGeoPoint& B1) {
@@ -145,6 +148,42 @@ double processAngle(double angle,int duration){//extend the period of turning to
 //         return TProlenums[i];}}
 //     return -1;}
 // int whichCircleclose()
+
+
+
+
+//the examination of the possiblity of passing back to the former kicker
+//==============================================================================
+//if return value == (0,0), it is indicated that there should not be a kick back.
+//===============================================================================
+//determine the actual angle to kick
+//precision is the proportional angle of the kick from the straight forward trial in opposition to the enemy.Its maximum is 100
+CVector determineWhetherEnemyIsInTheRangeOfKicking(CGeoPoint kickerPos,CGeoCirlce targetPosCircle,CGeoPoint enemyPos, int precision=80){ 
+    int MAX_PRECISION=100;
+    CVector finalkickDir;
+    
+    CVector pointer(targetPosCircle.Center()-kickerPos); // the vector which pointing from the kicker to the target
+    CVector perpendicularPointer0(pointer.y() * targetPosCircle.Radius() / pointer.mod(),pointer.x()* targetPosCircle.Radius() / pointer.mod());
+    CVector perpendicularPointer1(-pointer);   
+    CVector range0=pointer+perpendicularPointer0;
+    CVector range1=pointer+perpendicularPointer1;
+    //approximately calculate a triangle using the perpendicular radius, consisiting of 2 vectors: range0 and range1;
+
+    CVector enemyPointer(enemyPos-kickerPos);
+    // the vector pointing towards the enemy
+
+    if (crossProduct(enemyPointer,range0) > 0 && crossProduct(enemyPointer,range1) > 0){
+        return pointer + (perpendicularPointer0 * precision/MAX_PRECISION);
+    }else if (crossProduct(enemyPointer,range0) < 0 && crossProduct(enemyPointer,range1) < 0){
+        return pointer + (perpendicularPointer0 * precision/MAX_PRECISION);
+    }else{
+        CVector A(0,0);
+        return A;
+        }
+}
+
+
+
 void CTech3Pass::passwho(const CVisionModule* pVision, int change, int passer)
 {
     if(change)
@@ -169,8 +208,8 @@ void CTech3Pass::passwho(const CVisionModule* pVision, int change, int passer)
 	    //     ifchange = 0;
 	    // }
     	// else{
-	        CGeoPoint playerpos[4];
-	        int cur = 0;
+	        CGeoPoint playerpos[4];// the position of the player, the first three are ourplayer, the fourth is the enemy's position
+	        int cur = 0;//the number in the form for the player
 	        for(int irole = 0; irole <= Param::Field::MAX_PLAYER; irole++)
 	        {
 	            const PlayerVisionT& player = pVision->OurPlayer(irole);
@@ -190,6 +229,8 @@ void CTech3Pass::passwho(const CVisionModule* pVision, int change, int passer)
 	            //GDebugEngine::Instance()->gui_debug_msg(CGeoPoint(-330, 0 + 20*i), to_string(playerpos[i].y()).c_str(), COLOR_BLUE);
 	            std::cout << playerpos[i].x() << " " << playerpos[i].y() << " " << num << std::endl;
 	        }
+
+
 	        //std::cout << num << " asdas" << postonum(playerpos[0], pVision) << " " << postonum(playerpos[1], pVision) << std::endl;
 	        num = postonum(passwho(pVision->OurPlayer(num).Pos(), playerpos[0], playerpos[1], playerpos[2]), pVision);
 	        buff = 0;
