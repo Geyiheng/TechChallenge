@@ -126,7 +126,7 @@ void getcircledir0 (const CGeoPoint& playerpos, const CGeoPoint& centre, const d
     const CVector player2p2 = playerpos - p2;
     qiexiandir0[0] = player2p1.dir() < player2p2.dir() ? player2p1.dir() : player2p2.dir();
     qiexiandir0[1] = player2p1.dir() > player2p2.dir() ? player2p1.dir() : player2p2.dir();}
-double processAngle(double angle,int duration){
+double processAngle(double angle,int duration){//extend the period of turning to avoid jam
 	double adjustA;
 	if (duration>9000){adjustA=0.15;}
 	else{adjustA=0.05;}

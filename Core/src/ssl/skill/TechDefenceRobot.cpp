@@ -23,25 +23,25 @@
 #include <string>
 #include <cmath>
 using namespace std;
-namespace {enum TDstate {getball ,wait};}
-int rJam=45;
+//namespace {enum TDstate {getball ,wait};}
+int rJam=45;//The distance of the defender to the circle centre
 vector<CGeoPoint>  centers  = { CGeoPoint(75,-130), CGeoPoint(75,130), CGeoPoint(-150,0) };
-vector<CGeoCirlce> Circles  = { CGeoCirlce(centers[0], rJam), CGeoCirlce(centers[1], rJam), CGeoCirlce(centers[2], rJam) };
-int findIndex(const std::vector<int>& vec, int target) {
+vector<CGeoCirlce> Circles  = { CGeoCirlce(centers[0], rJam), CGeoCirlce(centers[1], rJam), CGeoCirlce(centers[2], rJam) };// establish the circles
+int findIndex(const std::vector<int>& vec, int target) { // return the position of a player in the form
     auto it = std::find(vec.begin(), vec.end(), target);
     if (it != vec.end()) {return std::distance(vec.begin(), it);}
     std::cout<<"INDEX NOT FOUND";return -1;}
-bool eraseElement(std::vector<int>& vec, int target) {
+bool eraseElement(std::vector<int>& vec, int target) { // esliminate the player with ball
     auto it = std::find(vec.begin(), vec.end(), target);
     if (it != vec.end()) {vec.erase(it);return true;}
     return false;}
-void drawDir(CGeoPoint A,double DIR,string msg){
+void drawDir(CGeoPoint A,double DIR,string msg){   //draw a angle on the UI 
     CGeoPoint D(A.x() + 100 * std::cos(DIR), A.y() + 100 * std::sin(DIR));
     CGeoSegment AD(A,D);
     GDebugEngine::Instance()->gui_debug_line(A,D,COLOR_YELLOW);
     GDebugEngine::Instance()->gui_debug_msg(D,(msg).c_str(), COLOR_RED);}
 double qiexiandir[3];
-void getcircledir (const CGeoPoint& playerpos, const CGeoPoint& centre, const double r){
+void getcircledir (const CGeoPoint& playerpos, const CGeoPoint& centre, const double r){// calculate contact angle
     // CGeoLine player2centre(playerpos, centre);
     const CVector player2centre = playerpos - centre;
     const double vertical = player2centre.dir() + 3.1415926/2;
@@ -51,16 +51,16 @@ void getcircledir (const CGeoPoint& playerpos, const CGeoPoint& centre, const do
     const CVector player2p2 = playerpos - p2;
     qiexiandir[0] = player2p1.dir() < player2p2.dir() ? player2p1.dir() : player2p2.dir();
     qiexiandir[1] = player2p1.dir() > player2p2.dir() ? player2p1.dir() : player2p2.dir();}
-double normalizeAngle1(double angle) {
+double normalizeAngle1(double angle) { // make angle into 0-2pi
     while (angle > M_PI) angle -= 2 * M_PI;
     while (angle <= -M_PI) angle += 2 * M_PI;
     return angle;}
-double sortdir(double A, double B, double dir, double vel,double threshold) {
+double sortdir(double A, double B, double dir, double vel,double threshold) { 
     if ((A >= dir && dir >= B) || (B >= dir && dir >= A)) {
         if (vel > threshold) {return normalizeAngle1(std::max(A, B));}
         else if (vel<=-threshold) {return normalizeAngle1(std::min(A, B));}}
     return 0;}
-double amidDir(double A, double B, double dir,double vel,double Vthreshold) {
+double amidDir(double A, double B, double dir,double vel,double Vthreshold) { //Vthreshold is the precision
     const double thres = 0.2;
     double A1 = A;
     double B1 = B;
@@ -76,8 +76,8 @@ double amidDir(double A, double B, double dir,double vel,double Vthreshold) {
     if      (tortn1!=0) {return tortn1;}
     else if (tortn2!=0) {return tortn2;}
     else                {return 0;}}
-double gotoAngle(double a,double b,double c,double d,double DIR,double VR,CGeoPoint A){
-    double a_c=amidDir(a,c,DIR,VR,0.2);
+double gotoAngle(double a,double b,double c,double d,double DIR,double VR,CGeoPoint A){ //predict the emeny's target
+    double a_c=amidDir(a,c,DIR,VR,0.2); 
     std::cout<<"amidDir("<<a<<c<<DIR<<VR<<0.1<<"->"<<a_c<<std::endl;
     if      (amidDir(a,d,DIR,1,0)){drawDir(A,DIR,"a d");return a;}
     else if (amidDir(d,c,DIR,1,0)){drawDir(A,DIR,"d c");return c;}
@@ -85,7 +85,7 @@ double gotoAngle(double a,double b,double c,double d,double DIR,double VR,CGeoPo
     else if (amidDir(a,b,DIR,1,0)){drawDir(A,DIR,"a b");return a;}
     else if (amidDir(b,c,DIR,1,0)){drawDir(A,DIR,"b c");return c;}}
     // return DIR;}
-CGeoPoint JamA2Jampos(CGeoPoint Apos,double DIR){   
+CGeoPoint JamA2Jampos(CGeoPoint Apos,double DIR){   //return the actual point to go
     int icircle;
     for(int i = 0; i < 3; ++i){if (centers[i].dist(Apos)<32){icircle=i;break;}}
     CGeoPoint JamP(Apos.x() + 200 * std::cos(DIR), Apos.y() + 200 * std::sin(DIR));
@@ -93,7 +93,7 @@ CGeoPoint JamA2Jampos(CGeoPoint Apos,double DIR){
     GDebugEngine::Instance()->gui_debug_line(JamP,Apos,COLOR_CYAN);
     CGeoSegmentCircleIntersection Intersection = CGeoSegmentCircleIntersection(JamPline,Circles[icircle]);
     return Intersection.point1();}
-int whichTPclose(std::vector<const PlayerVisionT*> TPptrs,std::vector<int>TProlenums,CGeoPoint center)
+int whichTPclose(std::vector<const PlayerVisionT*> TPptrs,std::vector<int>TProlenums,CGeoPoint center) // find the enemy to jam
 {
 for (size_t i = 0; i < TPptrs.size(); ++i)
 {
@@ -108,7 +108,7 @@ return -1;
 CGeoPoint midpoint1(const CGeoPoint& A, const CGeoPoint& B) {return CGeoPoint((A.x() + B.x()) / 2.0, (A.y() + B.y()) / 2.0);}
 CTechDefence::CTechDefence(){}
 
-void CTechDefence::plan(const CVisionModule* pVision){
+void CTechDefence::plan(const CVisionModule* pVision){ 
     CGeoPoint O1(75, -130);
     CGeoPoint O2(75, 130);
     CGeoPoint O3(-150, 0);
